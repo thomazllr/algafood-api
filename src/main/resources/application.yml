@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: algafood-api
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    username: root
+    password: password333
+    url: jdbc:mysql://localhost:3306/algafood?serverTimezone=UTC
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+server:
+  tomcat:
+    threads:
+      max: 20
