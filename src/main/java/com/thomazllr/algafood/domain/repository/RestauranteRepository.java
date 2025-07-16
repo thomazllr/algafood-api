@@ -1,7 +1,6 @@
-package com.thomazllr.algafood_api.domain.repository;
+package com.thomazllr.algafood.domain.repository;
 
-import com.thomazllr.algafood_api.domain.Cozinha;
-import com.thomazllr.algafood_api.domain.Restaurante;
+import com.thomazllr.algafood.domain.Restaurante;
 
 import java.util.List;
 

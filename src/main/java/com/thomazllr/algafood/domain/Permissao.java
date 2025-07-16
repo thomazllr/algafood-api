@@ -1,4 +1,4 @@
-package com.thomazllr.algafood_api.domain;
+package com.thomazllr.algafood.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +11,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-public class Cidade {
+public class Permissao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,7 @@ public class Cidade {
 
     private String nome;
 
-    @ManyToOne
-    private Estado estado;
+    private String descricao;
 }
+
+

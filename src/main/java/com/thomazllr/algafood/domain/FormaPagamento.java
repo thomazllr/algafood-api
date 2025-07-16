@@ -1,4 +1,4 @@
-package com.thomazllr.algafood_api.domain;
+package com.thomazllr.algafood.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +20,7 @@ public class FormaPagamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
     private String descricao;
 
 }

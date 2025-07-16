@@ -1,7 +1,7 @@
-package com.thomazllr.algafood_api.infrastructure.repository;
+package com.thomazllr.algafood.infrastructure.repository;
 
-import com.thomazllr.algafood_api.domain.FormaPagamento;
-import com.thomazllr.algafood_api.domain.repository.FormaPagamentoRepository;
+import com.thomazllr.algafood.domain.FormaPagamento;
+import com.thomazllr.algafood.domain.repository.FormaPagamentoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;

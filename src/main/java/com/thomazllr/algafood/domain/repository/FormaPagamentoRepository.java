@@ -1,6 +1,6 @@
-package com.thomazllr.algafood_api.domain.repository;
+package com.thomazllr.algafood.domain.repository;
 
-import com.thomazllr.algafood_api.domain.FormaPagamento;
+import com.thomazllr.algafood.domain.FormaPagamento;
 
 import java.util.List;
 

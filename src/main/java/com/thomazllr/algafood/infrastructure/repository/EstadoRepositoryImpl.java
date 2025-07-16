@@ -1,7 +1,7 @@
-package com.thomazllr.algafood_api.infrastructure.repository;
+package com.thomazllr.algafood.infrastructure.repository;
 
-import com.thomazllr.algafood_api.domain.Estado;
-import com.thomazllr.algafood_api.domain.repository.EstadoRepository;
+import com.thomazllr.algafood.domain.Estado;
+import com.thomazllr.algafood.domain.repository.EstadoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;

@@ -1,6 +1,6 @@
-package com.thomazllr.algafood_api.domain.repository;
+package com.thomazllr.algafood.domain.repository;
 
-import com.thomazllr.algafood_api.domain.Estado;
+import com.thomazllr.algafood.domain.Estado;
 
 import java.util.List;
 
