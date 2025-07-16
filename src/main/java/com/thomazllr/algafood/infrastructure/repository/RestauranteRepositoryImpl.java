@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.infrastructure.repository;
 
 import com.thomazllr.algafood.domain.Restaurante;
+import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -33,8 +34,14 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
 
     @Override
     @Transactional
-    public void remover(Restaurante restaurante) {
-        restaurante = buscarPorId(restaurante.getId());
+    public void remover(Long id) {
+        var restaurante = buscarPorId(id);
+
+        if (restaurante == null) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("restaurante de ID: %d não encontrada", id)
+            );
+        }
         manager.remove(restaurante);
     }
 }

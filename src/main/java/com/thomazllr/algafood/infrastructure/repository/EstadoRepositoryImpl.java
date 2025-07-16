@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.infrastructure.repository;
 
 import com.thomazllr.algafood.domain.Estado;
+import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.repository.EstadoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -33,8 +34,15 @@ public class EstadoRepositoryImpl implements EstadoRepository {
 
     @Override
     @Transactional
-    public void remover(Estado estado) {
-        estado = buscarPorId(estado.getId());
+    public void remover(Long id) {
+        var estado = buscarPorId(id);
+
+        if (estado == null) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Estado de ID: %d não encontrada", id)
+            );
+        }
+
         manager.remove(estado);
     }
 }

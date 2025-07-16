@@ -1,8 +1,8 @@
 package com.thomazllr.algafood.infrastructure.repository;
 
-import com.thomazllr.algafood.domain.Cozinha;
+import com.thomazllr.algafood.domain.Cidade;
 import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.thomazllr.algafood.domain.repository.CozinhaRepository;
+import com.thomazllr.algafood.domain.repository.CidadeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -11,36 +11,36 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class CozinhaRepositoryImpl implements CozinhaRepository {
+public class CidadeRepositoryImpl implements CidadeRepository {
 
     @PersistenceContext
     private EntityManager manager;
 
     @Override
-    public List<Cozinha> listar() {
-        return manager.createQuery("from Cozinha", Cozinha.class).getResultList();
+    public List<Cidade> listar() {
+        return manager.createQuery("from Cidade", Cidade.class).getResultList();
     }
 
     @Override
     @Transactional
-    public Cozinha salvar(Cozinha cozinha) {
-        return manager.merge(cozinha);
+    public Cidade salvar(Cidade cidade) {
+        return manager.merge(cidade);
     }
 
     @Override
-    public Cozinha buscarPorId(Long id) {
-        return manager.find(Cozinha.class, id);
+    public Cidade buscarPorId(Long id) {
+        return manager.find(Cidade.class, id);
     }
 
     @Override
     @Transactional
     public void remover(Long id) {
-        var cozinha = buscarPorId(id);
-        if (cozinha == null) {
+        var cidade = buscarPorId(id);
+        if (cidade == null) {
             throw new EntidadeNaoEncontradaException(
-                    String.format("Cozinha de ID: %d não encontrada", id)
+                    String.format("Cidade de ID: %d não encontrada", id)
             );
         }
-        manager.remove(cozinha);
+        manager.remove(cidade);
     }
 }

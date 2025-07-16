@@ -19,3 +19,5 @@ server:
   tomcat:
     threads:
       max: 20
+  error:
+    include-stacktrace: on_param
