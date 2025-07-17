@@ -21,8 +21,9 @@ public class RestauranteController {
     private final CadastroRestauranteService service;
 
     @GetMapping
-    public List<Restaurante> listar(@RequestParam(required = false) String nome, @RequestParam(required = false) Long cozinhaId) {
-        return (nome != null && cozinhaId != null) ? repository.consultarPorNome(nome, cozinhaId) : repository.findAll();
+    public List<Restaurante> listar() {
+        System.out.println("Passou por aqui!!!");
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")

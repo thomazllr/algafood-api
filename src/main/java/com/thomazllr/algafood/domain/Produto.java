@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-public class Cozinha {
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +23,13 @@ public class Cozinha {
 
     private String nome;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "cozinha")
-    private List<Restaurante> restaurantes = new ArrayList<>();
+    private String descricao;
 
+    private BigDecimal preco;
+
+    private boolean ativo;
+
+    @JsonIgnore
+    @ManyToOne
+    private Restaurante restaurante;
 }

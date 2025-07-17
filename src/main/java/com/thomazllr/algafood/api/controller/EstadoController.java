@@ -28,7 +28,7 @@ public class EstadoController {
     @GetMapping("/{id}")
     public ResponseEntity<Estado> buscarPorId(@PathVariable Long id) {
         var estado = repository.findById(id).orElse(null);
-        if(estado != null) {
+        if (estado != null) {
             return ResponseEntity.ok(estado);
         }
 
