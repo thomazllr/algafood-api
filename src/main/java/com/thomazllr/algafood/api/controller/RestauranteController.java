@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -73,5 +74,17 @@ public class RestauranteController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/com-frete-gratis")
+    public List<Restaurante> filtro(String nome) {
+        return repository.findComFreteGratis(nome);
+    }
+
+    @GetMapping("/primeiro")
+    public Optional<Restaurante> primeiro() {
+        return repository.buscarPrimeiro();
+    }
+
+
 
 }
