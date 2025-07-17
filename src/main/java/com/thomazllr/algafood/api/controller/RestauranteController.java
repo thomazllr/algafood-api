@@ -20,13 +20,13 @@ public class RestauranteController {
     private final CadastroRestauranteService service;
 
     @GetMapping
-    public List<Restaurante> listar() {
-        return repository.listar();
+    public List<Restaurante> listar(@RequestParam(required = false) String nome, @RequestParam(required = false) Long cozinhaId) {
+        return (nome != null && cozinhaId != null) ? repository.consultarPorNome(nome, cozinhaId) : repository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurante> buscarPorId(@PathVariable Long id) {
-        var restaurante = repository.buscarPorId(id);
+        var restaurante = repository.findById(id).orElse(null);
         if (restaurante != null) {
             return ResponseEntity.ok(restaurante);
         }
@@ -46,7 +46,7 @@ public class RestauranteController {
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
 
-        var restauranteEncontrado = repository.buscarPorId(id);
+        var restauranteEncontrado = repository.findById(id).orElse(null);
 
         if (restauranteEncontrado != null) {
             try {

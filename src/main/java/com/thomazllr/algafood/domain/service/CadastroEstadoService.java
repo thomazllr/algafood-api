@@ -14,12 +14,12 @@ public class CadastroEstadoService {
     private final EstadoRepository repository;
 
     public Estado salvar(Estado estado) {
-        return repository.salvar(estado);
+        return repository.save(estado);
     }
 
     public void remover(Long id) {
         try {
-            repository.remover(id);
+            repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format("Estado de ID: %d está em uso", id)

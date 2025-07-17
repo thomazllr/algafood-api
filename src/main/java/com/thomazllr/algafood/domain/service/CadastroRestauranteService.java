@@ -19,20 +19,18 @@ public class CadastroRestauranteService {
     public Restaurante salvar(Restaurante restaurante) {
 
         var cozinhaId = restaurante.getCozinha().getId();
-        var cozinha = cozinhaRepository.buscarPorId(cozinhaId);
-
-        if (cozinha == null) {
-            throw new EntidadeNaoEncontradaException(String.format("Entidade de Cozinha de ID: %d não encontrada", cozinhaId));
-        }
+        var cozinha = cozinhaRepository
+                .findById(cozinhaId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Entidade de Cozinha de ID: %d não encontrada", cozinhaId)));
 
         restaurante.setCozinha(cozinha);
 
-        return repository.salvar(restaurante);
+        return repository.save(restaurante);
     }
 
     public void remover(Long id) {
         try {
-            repository.remover(id);
+            repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("Restaurante de ID: %d está em uso", id));
         }

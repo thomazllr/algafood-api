@@ -22,12 +22,18 @@ public class EstadoController {
 
     @GetMapping
     public List<Estado> listar() {
-        return repository.listar();
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Estado buscarPorId(@PathVariable Long id) {
-        return repository.buscarPorId(id);
+    public ResponseEntity<Estado> buscarPorId(@PathVariable Long id) {
+        var estado = repository.findById(id).orElse(null);
+        if(estado != null) {
+            return ResponseEntity.ok(estado);
+        }
+
+        return ResponseEntity.notFound().build();
+
     }
 
     @PostMapping
@@ -38,7 +44,7 @@ public class EstadoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
-        var estadoEncontrado = repository.buscarPorId(id);
+        var estadoEncontrado = repository.findById(id).orElse(null);
 
         try {
             if (estadoEncontrado != null) {

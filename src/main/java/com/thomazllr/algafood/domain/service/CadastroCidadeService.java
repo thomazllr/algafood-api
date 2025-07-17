@@ -17,16 +17,16 @@ public class CadastroCidadeService {
     public Cidade salvar(Cidade cidade) {
 
         var estadoId = cidade.getEstado().getId();
-        var estado = estadoRepository.buscarPorId(estadoId);
-        if(estado == null){
-            throw new EntidadeNaoEncontradaException(String.format("Estado com ID: %d não encontrado",  estadoId));
-        }
+        var estado = estadoRepository
+                .findById(estadoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Estado com ID: %d não encontrado", estadoId)));
+
         cidade.setEstado(estado);
-        return repository.salvar(cidade);
+        return repository.save(cidade);
     }
 
     public void remover(Long id) {
-        repository.remover(id);
+        repository.deleteById(id);
     }
 
 }

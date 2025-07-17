@@ -22,16 +22,13 @@ public class CozinhaController {
 
     @GetMapping
     public List<Cozinha> listar() {
-        return repository.listar();
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cozinha> buscarPorId(@PathVariable Long id) {
-        var cozinha = repository.buscarPorId(id);
-        if (cozinha != null) {
-            return ResponseEntity.ok(cozinha);
-        }
-        return ResponseEntity.notFound().build();
+        var cozinha = repository.findById(id);
+        return cozinha.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -42,7 +39,7 @@ public class CozinhaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
-        var cozinhaEncontrada = repository.buscarPorId(id);
+        var cozinhaEncontrada = repository.findById(id).orElse(null);
 
         if (cozinhaEncontrada != null) {
             cozinhaEncontrada.setNome(cozinha.getNome());
@@ -58,11 +55,10 @@ public class CozinhaController {
         try {
             service.remover(id);
             return ResponseEntity.noContent().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
+        } catch (EntidadeEmUsoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
-
     }
 }

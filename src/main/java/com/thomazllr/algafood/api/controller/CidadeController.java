@@ -21,12 +21,12 @@ public class CidadeController {
 
     @GetMapping
     public List<Cidade> listar() {
-        return repository.listar();
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cidade> buscarPorId(@PathVariable Long id) {
-        var cidade = repository.buscarPorId(id);
+        var cidade = repository.findById(id).orElse(null);
         if (cidade != null) {
             return ResponseEntity.ok(cidade);
         }
@@ -46,7 +46,9 @@ public class CidadeController {
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
 
-        var cidadeEncontrada = repository.buscarPorId(id);
+        var cidadeEncontrada = repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        String.format("Cidade com ID %d não encontrada", cidade.getId())));
 
         if (cidadeEncontrada != null) {
             try {
