@@ -3,6 +3,8 @@ package com.thomazllr.algafood.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -11,17 +13,24 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-public class Permissao {
+public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    private String nome;
+    private Integer quantidade;
 
-    private String descricao;
+    private BigDecimal precoUnitario;
 
+    private BigDecimal precoTotal;
+
+    private String observacao;
+
+    @ManyToOne
+    private Produto produto;
+
+    @ManyToOne
+    private Pedido pedido;
 }
-
-
