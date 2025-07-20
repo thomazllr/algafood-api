@@ -3,7 +3,6 @@ package com.thomazllr.algafood.domain.service;
 import com.thomazllr.algafood.domain.Cidade;
 import com.thomazllr.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
-import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.repository.CidadeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;

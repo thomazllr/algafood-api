@@ -12,24 +12,43 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorType errorType = ErrorType.ENTIDADE_NAO_ENCONTRADA;
+        var detail = ex.getMessage();
+
+        var error = criarErro(errorType, status, detail).build();
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
     public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorType errorType = ErrorType.ERRO_DE_NEGOCIO;
+        var detail = ex.getMessage();
+
+        var error = criarErro(errorType, status, detail).build();
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
     public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+
+        HttpStatus status = HttpStatus.CONFLICT;
+        ErrorType errorType = ErrorType.ENTIDADE_EM_USO;
+        var detail = ex.getMessage();
+
+        var error = criarErro(errorType, status, detail).build();
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
     @Override
@@ -46,17 +65,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         if (body == null) {
             body = Error.builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem(mensagem)
+                    .title(mensagem)
+                    .status(status.value())
                     .build();
         } else if (body instanceof String) {
             body = Error.builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem((String) body)
+                    .title((String) body)
                     .build();
         }
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    public Error.ErrorBuilder criarErro(ErrorType errorType, HttpStatus status, String detail) {
+        return Error.builder()
+                .title(errorType.getTitle())
+                .type(errorType.getUri())
+                .detail(detail)
+                .status(status.value());
     }
 
 }
