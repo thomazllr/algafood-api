@@ -1,10 +1,8 @@
 package com.thomazllr.algafood.api.controller;
 
 import com.thomazllr.algafood.domain.Estado;
-import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
-import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.repository.EstadoRepository;
-import com.thomazllr.algafood.domain.service.CadastroEstadoService;
+import com.thomazllr.algafood.domain.service.EstadoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,7 @@ import java.util.List;
 public class EstadoController {
 
     private final EstadoRepository repository;
-    private final CadastroEstadoService service;
+    private final EstadoService service;
 
     @GetMapping
     public List<Estado> listar() {
@@ -27,48 +25,27 @@ public class EstadoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Estado> buscarPorId(@PathVariable Long id) {
-        var estado = repository.findById(id).orElse(null);
-        if (estado != null) {
-            return ResponseEntity.ok(estado);
-        }
-
-        return ResponseEntity.notFound().build();
-
+        var estado = service.buscarOuFalhar(id);
+        return ResponseEntity.ok(estado);
     }
 
     @PostMapping
     public ResponseEntity<Estado> salvar(@RequestBody Estado estado) {
-        estado = service.salvar(estado);
+        service.salvar(estado);
         return ResponseEntity.status(HttpStatus.CREATED).body(estado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
-        var estadoEncontrado = repository.findById(id).orElse(null);
-
-        try {
-            if (estadoEncontrado != null) {
-                estadoEncontrado.setNome(estado.getNome());
-                return ResponseEntity.ok(service.salvar(estadoEncontrado));
-            }
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
-        return ResponseEntity.notFound().build();
-
+    public ResponseEntity<Estado> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
+        var estadoEncontrado = service.buscarOuFalhar(id);
+        estadoEncontrado.setNome(estado.getNome());
+        return ResponseEntity.ok(service.salvar(estadoEncontrado));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> remover(@PathVariable Long id) {
-        try {
-            service.remover(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
+        service.remover(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
