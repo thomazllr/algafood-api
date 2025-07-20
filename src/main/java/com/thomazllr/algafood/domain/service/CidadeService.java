@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.domain.service;
 
 import com.thomazllr.algafood.domain.Cidade;
+import com.thomazllr.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.repository.CidadeRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,13 @@ public class CidadeService {
     }
 
     public void remover(Long id) {
-        repository.deleteById(id);
+        var cidade = buscarOuFalhar(id);
+        repository.delete(cidade);
     }
 
     public Cidade buscarOuFalhar(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id)));
+                .orElseThrow(() -> new CidadeNaoEncontradaException(id));
     }
 
 }

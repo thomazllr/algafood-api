@@ -1,6 +1,8 @@
 package com.thomazllr.algafood.api.controller;
 
 import com.thomazllr.algafood.domain.Cidade;
+import com.thomazllr.algafood.domain.exception.EstadoNaoEncontradoException;
+import com.thomazllr.algafood.domain.exception.NegocioException;
 import com.thomazllr.algafood.domain.repository.CidadeRepository;
 import com.thomazllr.algafood.domain.service.CidadeService;
 import lombok.RequiredArgsConstructor;
@@ -31,17 +33,26 @@ public class CidadeController {
 
     @PostMapping
     public ResponseEntity<Cidade> salvar(@RequestBody Cidade cidade) {
-        service.salvar(cidade);
+        try {
+            service.salvar(cidade);
+        } catch (EstadoNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Cidade> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
-        var cidadeEncontrada = service.buscarOuFalhar(id);
-        cidadeEncontrada.setNome(cidade.getNome());
-        cidadeEncontrada.setEstado(cidade.getEstado());
-        cidadeEncontrada = service.salvar(cidadeEncontrada);
-        return ResponseEntity.ok(cidadeEncontrada);
+        try {
+            var cidadeEncontrada = service.buscarOuFalhar(id);
+            cidadeEncontrada.setNome(cidade.getNome());
+            cidadeEncontrada.setEstado(cidade.getEstado());
+            cidadeEncontrada = service.salvar(cidadeEncontrada);
+            return ResponseEntity.ok(cidadeEncontrada);
+        } catch (EstadoNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+
     }
 
     @DeleteMapping("/{id}")

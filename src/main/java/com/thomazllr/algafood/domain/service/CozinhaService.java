@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.domain.service;
 
 import com.thomazllr.algafood.domain.Cozinha;
+import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
 import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;
@@ -32,8 +33,7 @@ public class CozinhaService {
 
     public Cozinha buscarOuFalhar(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_COZINHA_NAO_ENCONTRADA, id)));
+                .orElseThrow(() -> new CozinhaNaoEncontradaException(id));
     }
 
 }

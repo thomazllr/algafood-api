@@ -1,6 +1,8 @@
 package com.thomazllr.algafood.api.controller;
 
 import com.thomazllr.algafood.domain.Restaurante;
+import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
+import com.thomazllr.algafood.domain.exception.NegocioException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
 import com.thomazllr.algafood.domain.service.RestauranteService;
 import lombok.RequiredArgsConstructor;
@@ -32,23 +34,28 @@ public class RestauranteController {
 
     @PostMapping
     public ResponseEntity<Restaurante> salvar(@RequestBody Restaurante restaurante) {
-        service.salvar(restaurante);
-        return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
+        try {
+            service.salvar(restaurante);
+            return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
+        } catch (CozinhaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+        try {
+            var restauranteEncontrado = service.buscarOuFalhar(id);
 
-        var restauranteEncontrado = service.buscarOuFalhar(id);
+            restauranteEncontrado.setNome(restaurante.getNome());
+            restauranteEncontrado.setTaxaFrete(restaurante.getTaxaFrete());
+            restauranteEncontrado.setCozinha(restaurante.getCozinha());
 
-        restauranteEncontrado.setNome(restaurante.getNome());
-        restauranteEncontrado.setTaxaFrete(restaurante.getTaxaFrete());
-        restauranteEncontrado.setCozinha(restaurante.getCozinha());
-
-        restauranteEncontrado = service.salvar(restauranteEncontrado);
-
-        return ResponseEntity.ok(restauranteEncontrado);
-
+            restauranteEncontrado = service.salvar(restauranteEncontrado);
+            return ResponseEntity.ok(restauranteEncontrado);
+        } catch (CozinhaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -2,6 +2,7 @@ package com.thomazllr.algafood.domain.service;
 
 import com.thomazllr.algafood.domain.Restaurante;
 import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.thomazllr.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,7 @@ public class RestauranteService {
 
     public Restaurante buscarOuFalhar(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)));
+                .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }
 
 
