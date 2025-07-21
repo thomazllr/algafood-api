@@ -117,14 +117,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-        Throwable rootCause = ExceptionUtils.getRootCause(ex);
-
-        if (rootCause instanceof MethodArgumentTypeMismatchException methodArgumentTypeMismatchException) {
+        if (ex instanceof MethodArgumentTypeMismatchException methodArgumentTypeMismatchException) {
             return handleMethodArgumentTypeMismatchException(methodArgumentTypeMismatchException, headers, status, request);
         }
 
         ErrorType errorType = ErrorType.PARAMETRO_INVALIDO;
-        var detail = "Algum parametro está errado.";
+        var detail = "Parâmetro na URL está errado. Corrija e tente novamente";
 
         var error = criarErro(errorType, (HttpStatus) status, detail).build();
 
@@ -134,10 +132,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, HttpHeaders
             headers, HttpStatusCode status, WebRequest request) {
 
-        var path = ex.getPropertyName();
-
         ErrorType errorType = ErrorType.PARAMETRO_INVALIDO;
-        String detail = String.format("A propriedade '%s' não pode.", path);
+
+        String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', "
+                                      + "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
+                ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
         Error error = criarErro(errorType, (HttpStatus) status, detail).build();
 
