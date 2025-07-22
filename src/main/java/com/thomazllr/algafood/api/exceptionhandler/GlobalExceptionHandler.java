@@ -17,16 +17,34 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    public static final String MSG_GENERICA_ERROR_INTERNO = "Ocorreu um erro inesperado no sistema. " +
+                                                            "Tente novamente mais tarde ou contate o administrador do sistema.";
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorType errorType = ErrorType.ERROR_DE_SISTEMA;
+
+        ex.printStackTrace();
+
+        var error = criarErro(errorType, status, MSG_GENERICA_ERROR_INTERNO).build();
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+    }
+
+
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<Object> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorType errorType = ErrorType.ENTIDADE_NAO_ENCONTRADA;
+        ErrorType errorType = ErrorType.RECURSO_NAO_ENCONTRADO;
         var detail = ex.getMessage();
 
         var error = criarErro(errorType, status, detail).build();
@@ -46,10 +64,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 ex.getValue(),
                 ex.getTargetType().getSimpleName());
 
-        Error error = criarErro(errorType, (HttpStatus) status, detail).build();
+        Error error = criarErro(errorType, (HttpStatus) status, detail)
+                .userMessage(MSG_GENERICA_ERROR_INTERNO)
+                .build();
 
         return handleExceptionInternal(ex, error, headers, status, request);
 
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ErrorType errorType = ErrorType.RECURSO_NAO_ENCONTRADO;
+
+        String path = ex.getResourcePath();
+        var detail = String.format("Recurso %s não encontrado. Verifique o caminho e tente novamente.", path);
+
+        var error = criarErro(errorType, (HttpStatus) status, detail)
+                .userMessage(MSG_GENERICA_ERROR_INTERNO)
+                .build();
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
     private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders
@@ -61,7 +95,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorType errorType = ErrorType.MENSAGEM_INCOMPREENSIVEL;
         String detail = String.format("A propriedade '%s' não existe. Corrija ou remova essa propriedade e tente novamente.", path);
 
-        Error error = criarErro(errorType, (HttpStatus) status, detail).build();
+        Error error = criarErro(errorType, (HttpStatus) status, detail)
+                .userMessage(detail)
+                .build();
 
         return handleExceptionInternal(ex, error, headers, status, request);
 
@@ -74,7 +110,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorType errorType = ErrorType.ERRO_DE_NEGOCIO;
         var detail = ex.getMessage();
 
-        var error = criarErro(errorType, status, detail).build();
+        var error = criarErro(errorType, status, detail)
+                .userMessage(MSG_GENERICA_ERROR_INTERNO)
+                .build();
 
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
@@ -86,7 +124,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorType errorType = ErrorType.ENTIDADE_EM_USO;
         var detail = ex.getMessage();
 
-        var error = criarErro(errorType, status, detail).build();
+        var error = criarErro(errorType, status, detail)
+                .userMessage(detail)
+                .build();
 
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
@@ -160,10 +200,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             body = Error.builder()
                     .title(mensagem)
                     .status(status.value())
+                    .timestamp(LocalDateTime.now())
                     .build();
         } else if (body instanceof String corpo) {
             body = Error.builder()
                     .title(corpo)
+                    .timestamp(LocalDateTime.now())
                     .build();
         }
 
@@ -175,7 +217,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .title(errorType.getTitle())
                 .type(errorType.getUri())
                 .detail(detail)
-                .status(status.value());
+                .status(status.value())
+                .timestamp(LocalDateTime.now());
     }
 
 }
