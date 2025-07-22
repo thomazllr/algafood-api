@@ -5,6 +5,7 @@ import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
 import com.thomazllr.algafood.domain.service.RestauranteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public ResponseEntity<Restaurante> salvar(@RequestBody Restaurante restaurante) {
+    public ResponseEntity<Restaurante> salvar(@RequestBody @Valid Restaurante restaurante) {
         try {
             service.salvar(restaurante);
             return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
@@ -43,7 +44,7 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+    public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante) {
         try {
             var restauranteEncontrado = service.buscarOuFalhar(id);
 

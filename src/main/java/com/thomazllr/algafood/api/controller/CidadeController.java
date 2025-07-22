@@ -5,6 +5,7 @@ import com.thomazllr.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
 import com.thomazllr.algafood.domain.repository.CidadeRepository;
 import com.thomazllr.algafood.domain.service.CidadeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class CidadeController {
     }
 
     @PostMapping
-    public ResponseEntity<Cidade> salvar(@RequestBody Cidade cidade) {
+    public ResponseEntity<Cidade> salvar(@RequestBody @Valid Cidade cidade) {
         try {
             service.salvar(cidade);
         } catch (EstadoNaoEncontradoException e) {

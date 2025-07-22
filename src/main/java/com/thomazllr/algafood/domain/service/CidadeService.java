@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CidadeService {
 
-    public static final String MSG_CIDADE_NAO_ENCONTRADA = "Cidade com ID: %d não encontrada";
     public static final String MSG_CIDADE_EM_USO = "Cidade com ID: %d está em uso";
-
 
     private final CidadeRepository repository;
     private final EstadoService estadoService;

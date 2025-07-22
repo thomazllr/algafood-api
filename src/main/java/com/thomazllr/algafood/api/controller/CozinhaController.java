@@ -3,6 +3,7 @@ package com.thomazllr.algafood.api.controller;
 import com.thomazllr.algafood.domain.Cozinha;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;
 import com.thomazllr.algafood.domain.service.CozinhaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
+    public ResponseEntity<Cozinha> salvar(@RequestBody @Valid Cozinha cozinha) {
         service.salvar(cozinha);
         return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
     }

@@ -10,6 +10,7 @@ public enum ErrorType {
     ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
     MENSAGEM_INCOMPREENSIVEL("/mensagem-incompreensivel", "Mensagem incompreensível"),
     PARAMETRO_INVALIDO("/parametro-invalido", "Parâmetro inválido"),
+    DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos."),
     ERROR_DE_SISTEMA("/error-de-sistema", "Erro de sistema");
 
     private String uri;
