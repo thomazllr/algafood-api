@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    username: root
+    password: password333
+    url: jdbc:mysql://localhost:3306/algafood_test?createDatabaseIfNotExist=true&serverTimezone=UTC
+    hikari:
+      maximum-pool-size: 1
+  flyway:
+      locations: classpath:db/migration
