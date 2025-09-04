@@ -1,5 +1,9 @@
 package com.thomazllr.algafood.api.controller;
 
+import com.thomazllr.algafood.api.assembler.cozinha.CozinhaInputDisassembler;
+import com.thomazllr.algafood.api.assembler.cozinha.CozinhaModelAssembler;
+import com.thomazllr.algafood.api.model.CozinhaModel;
+import com.thomazllr.algafood.api.model.input.cozinha.CozinhaInput;
 import com.thomazllr.algafood.domain.Cozinha;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;
 import com.thomazllr.algafood.domain.service.CozinhaService;
@@ -19,28 +23,41 @@ public class CozinhaController {
     private final CozinhaRepository repository;
     private final CozinhaService service;
 
+    private final CozinhaModelAssembler assembler;
+    private final CozinhaInputDisassembler disassembler;
+
     @GetMapping
-    public List<Cozinha> listar() {
-        return repository.findAll();
+    public List<CozinhaModel> listar() {
+        return assembler.toCollectionModel(repository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cozinha> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.buscarOuFalhar(id));
+    public ResponseEntity<CozinhaModel> buscarPorId(@PathVariable Long id) {
+
+        var cozinha = service.buscarOuFalhar(id);
+        var model = assembler.toModel(cozinha);
+
+        return ResponseEntity.ok(model);
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> salvar(@RequestBody @Valid Cozinha cozinha) {
-        service.salvar(cozinha);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
+    public ResponseEntity<CozinhaModel> salvar(@RequestBody @Valid CozinhaInput input) {
+
+        var cozinha = disassembler.toEntity(input);
+
+        cozinha = service.salvar(cozinha);
+
+        var model = assembler.toModel(cozinha);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(model);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
+    public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long id, @RequestBody CozinhaInput cozinha) {
         var cozinhaEncontrada = service.buscarOuFalhar(id);
-        cozinhaEncontrada.setNome(cozinha.getNome());
+        disassembler.copyToDomainObject(cozinha, cozinhaEncontrada);
         Cozinha cozinhaSalva = service.salvar(cozinhaEncontrada);
-        return ResponseEntity.ok(cozinhaSalva);
+        return ResponseEntity.ok(assembler.toModel(cozinhaSalva));
     }
 
     @DeleteMapping("/{id}")

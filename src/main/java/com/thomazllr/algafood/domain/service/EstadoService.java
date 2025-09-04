@@ -24,6 +24,7 @@ public class EstadoService {
         var estado = buscarOuFalhar(id);
         try {
             repository.delete(estado);
+            repository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format(MSG_ESTADO_EM_USO, id)

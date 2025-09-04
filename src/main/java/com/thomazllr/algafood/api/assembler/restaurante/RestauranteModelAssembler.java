@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.api.assembler;
+package com.thomazllr.algafood.api.assembler.restaurante;
 
 import com.thomazllr.algafood.api.model.RestauranteModel;
 import com.thomazllr.algafood.domain.Restaurante;

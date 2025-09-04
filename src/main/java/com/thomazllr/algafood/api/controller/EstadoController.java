@@ -1,6 +1,9 @@
 package com.thomazllr.algafood.api.controller;
 
-import com.thomazllr.algafood.domain.Estado;
+import com.thomazllr.algafood.api.assembler.estado.EstadoInputDisassembler;
+import com.thomazllr.algafood.api.assembler.estado.EstadoModelAssembler;
+import com.thomazllr.algafood.api.model.EstadoModel;
+import com.thomazllr.algafood.api.model.input.estado.EstadoInput;
 import com.thomazllr.algafood.domain.repository.EstadoRepository;
 import com.thomazllr.algafood.domain.service.EstadoService;
 import lombok.RequiredArgsConstructor;
@@ -18,28 +21,37 @@ public class EstadoController {
     private final EstadoRepository repository;
     private final EstadoService service;
 
+    private final EstadoModelAssembler assembler;
+    private final EstadoInputDisassembler disassembler;
+
     @GetMapping
-    public List<Estado> listar() {
-        return repository.findAll();
+    public List<EstadoModel> listar() {
+        return assembler.toCollectionModel(repository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estado> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<EstadoModel> buscarPorId(@PathVariable Long id) {
         var estado = service.buscarOuFalhar(id);
-        return ResponseEntity.ok(estado);
+        return ResponseEntity.ok(assembler.toModel(estado));
     }
 
     @PostMapping
-    public ResponseEntity<Estado> salvar(@RequestBody Estado estado) {
+    public ResponseEntity<EstadoModel> salvar(@RequestBody EstadoInput input) {
+
+        var estado = disassembler.toEntity(input);
         service.salvar(estado);
-        return ResponseEntity.status(HttpStatus.CREATED).body(estado);
+
+        var model = assembler.toModel(estado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(model);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Estado> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
+    public ResponseEntity<EstadoModel> atualizar(@PathVariable Long id, @RequestBody EstadoInput estado) {
         var estadoEncontrado = service.buscarOuFalhar(id);
-        estadoEncontrado.setNome(estado.getNome());
-        return ResponseEntity.ok(service.salvar(estadoEncontrado));
+        disassembler.copyToDomainObject(estado, estadoEncontrado);
+        estadoEncontrado = service.salvar(estadoEncontrado);
+        var estadoModel = assembler.toModel(estadoEncontrado);
+        return ResponseEntity.ok(estadoModel);
     }
 
     @DeleteMapping("/{id}")

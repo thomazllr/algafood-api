@@ -1,5 +1,11 @@
 package com.thomazllr.algafood.api.controller;
 
+import com.thomazllr.algafood.api.assembler.cidade.CidadeInputDisassembler;
+import com.thomazllr.algafood.api.assembler.cidade.CidadeModelAssembler;
+import com.thomazllr.algafood.api.assembler.estado.EstadoInputDisassembler;
+import com.thomazllr.algafood.api.assembler.estado.EstadoModelAssembler;
+import com.thomazllr.algafood.api.model.CidadeModel;
+import com.thomazllr.algafood.api.model.input.cidade.CidadeInput;
 import com.thomazllr.algafood.domain.Cidade;
 import com.thomazllr.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
@@ -21,35 +27,38 @@ public class CidadeController {
     private final CidadeRepository repository;
     private final CidadeService service;
 
+    private final CidadeModelAssembler assembler;
+    private final CidadeInputDisassembler disassembler;
+
     @GetMapping
     public List<Cidade> listar() {
         return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cidade> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<CidadeModel> buscarPorId(@PathVariable Long id) {
         var cidade = service.buscarOuFalhar(id);
-        return ResponseEntity.ok(cidade);
+        return ResponseEntity.ok(assembler.toModel(cidade));
     }
 
     @PostMapping
-    public ResponseEntity<Cidade> salvar(@RequestBody @Valid Cidade cidade) {
+    public ResponseEntity<CidadeModel> salvar(@RequestBody @Valid CidadeInput input) {
+        Cidade cidade = disassembler.toEntity(input);
         try {
-            service.salvar(cidade);
+            cidade = service.salvar(cidade);
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
+        return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(cidade));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cidade> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
+    public ResponseEntity<CidadeModel> atualizar(@PathVariable Long id, @RequestBody CidadeInput cidade) {
         try {
             var cidadeEncontrada = service.buscarOuFalhar(id);
-            cidadeEncontrada.setNome(cidade.getNome());
-            cidadeEncontrada.setEstado(cidade.getEstado());
+            disassembler.copyToDomainObject(cidade, cidadeEncontrada);
             cidadeEncontrada = service.salvar(cidadeEncontrada);
-            return ResponseEntity.ok(cidadeEncontrada);
+            return ResponseEntity.ok(assembler.toModel(cidadeEncontrada));
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }

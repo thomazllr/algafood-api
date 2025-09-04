@@ -33,6 +33,7 @@ public class CidadeService {
 
         try {
             repository.delete(cidade);
+            repository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(MSG_CIDADE_EM_USO, id));
         }

@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.domain.exception;
 
-public class EstadoNaoEncontradoException extends EntidadeEmUsoException {
+public class EstadoNaoEncontradoException extends EntidadeNaoEncontradaException {
 
     public EstadoNaoEncontradoException(String message) {
         super(message);

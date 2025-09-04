@@ -1,10 +1,9 @@
 package com.thomazllr.algafood.api.controller;
 
-import com.thomazllr.algafood.api.assembler.RestauranteModelAssembler;
-import com.thomazllr.algafood.api.disassembler.RestauranteInputDisassembler;
+import com.thomazllr.algafood.api.assembler.restaurante.RestauranteModelAssembler;
+import com.thomazllr.algafood.api.assembler.restaurante.RestauranteInputDisassembler;
 import com.thomazllr.algafood.api.model.RestauranteModel;
-import com.thomazllr.algafood.api.model.input.RestauranteInput;
-import com.thomazllr.algafood.domain.Restaurante;
+import com.thomazllr.algafood.api.model.input.restaurante.RestauranteInput;
 import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -59,16 +57,14 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante) {
+    public ResponseEntity<RestauranteModel> atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput input) {
         try {
-            var restauranteEncontrado = service.buscarOuFalhar(id);
 
-            restauranteEncontrado.setNome(restaurante.getNome());
-            restauranteEncontrado.setTaxaFrete(restaurante.getTaxaFrete());
-            restauranteEncontrado.setCozinha(restaurante.getCozinha());
+            var restauranteEncontrado = service.buscarOuFalhar(id);
+            disassembler.copyToDomainObject(input, restauranteEncontrado);
 
             restauranteEncontrado = service.salvar(restauranteEncontrado);
-            return ResponseEntity.ok(restauranteEncontrado);
+            return ResponseEntity.ok(assembler.toModel(restauranteEncontrado));
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
@@ -81,14 +77,8 @@ public class RestauranteController {
     }
 
     @GetMapping("/com-frete-gratis")
-    public List<Restaurante> filtro(String nome) {
-        return repository.findComFreteGratis(nome);
+    public List<RestauranteModel> filtro(String nome) {
+        return assembler.toCollectionModel(repository.findComFreteGratis(nome));
     }
-
-    @GetMapping("/primeiro")
-    public Optional<Restaurante> primeiro() {
-        return repository.buscarPrimeiro();
-    }
-
 
 }
