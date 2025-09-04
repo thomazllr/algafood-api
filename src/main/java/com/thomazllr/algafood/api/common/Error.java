@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.api.exceptionhandler;
+package com.thomazllr.algafood.api.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

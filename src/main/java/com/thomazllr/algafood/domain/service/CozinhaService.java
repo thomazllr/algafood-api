@@ -4,6 +4,7 @@ import com.thomazllr.algafood.domain.Cozinha;
 import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ public class CozinhaService {
 
     private final CozinhaRepository repository;
 
+    @Transactional
     public Cozinha salvar(Cozinha cozinha) {
         return repository.save(cozinha);
     }
 
+    @Transactional
     public void remover(Long id) {
         Cozinha cozinha = buscarOuFalhar(id);
         try {
