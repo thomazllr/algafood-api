@@ -3,10 +3,8 @@ package com.thomazllr.algafood;
 import com.thomazllr.algafood.domain.Cozinha;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;
 import com.thomazllr.algafood.util.DatabaseCleaner;
-import com.thomazllr.algafood.util.ResourceUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
-import static com.thomazllr.algafood.util.ResourceUtils.*;
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.thomazllr.algafood.util.ResourceUtils.getContentFromResource;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -55,20 +52,20 @@ class CadastroCozinhaIT {
         given()
                 .accept(ContentType.JSON)
                 .when()
-                    .get()
+                .get()
                 .then()
-                    .statusCode(200);
+                .statusCode(200);
     }
 
     @Test
-    @DisplayName("Deve conter 4 cozinhas quando consultar cozinhas")
+    @DisplayName("Deve conter 2 cozinhas quando consultar cozinhas")
     void deveConter4Cozinhas_QuandoConsultarCozinhas() {
         given()
                 .accept(ContentType.JSON)
                 .when()
-                    .get()
+                .get()
                 .then()
-                    .body("", hasSize(2));
+                .body("", hasSize(2));
     }
 
 
@@ -81,23 +78,23 @@ class CadastroCozinhaIT {
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .when()
-                    .post()
+                .post()
                 .then()
-                    .statusCode(201)
-                    .body("nome", equalTo("Chinesa"));
+                .statusCode(201)
+                .body("nome", equalTo("Chinesa"));
     }
 
     @Test
     @DisplayName("Deve retornar resposta e dados corretos quando consultar cozinha existente")
     void deveRetornarRespostaEDadosCorretos_QuandoConsultarCozinhaExistente() {
-                given()
-                        .pathParam("id", 2)
+        given()
+                .pathParam("id", 2)
                 .accept(ContentType.JSON)
                 .when()
-                    .get("/{id}")
+                .get("/{id}")
                 .then()
-                    .statusCode(200)
-                    .body("nome", equalTo(cozinhaAmerica.getNome()));
+                .statusCode(200)
+                .body("nome", equalTo(cozinhaAmerica.getNome()));
     }
 
     private void prepararBancoDeDados() {
@@ -106,9 +103,10 @@ class CadastroCozinhaIT {
         cozinha1.setNome("Brasileira");
         repository.save(cozinha1);
 
+        cozinhaAmerica = new Cozinha();
+
         cozinhaAmerica.setNome("Americana");
         repository.save(cozinhaAmerica);
-
 
 
     }

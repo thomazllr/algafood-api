@@ -23,7 +23,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -236,13 +237,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             body = Error.builder()
                     .title(mensagem)
                     .status(status.value())
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now(ZoneId.of("UTC")))
                     .userMessage(MSG_GENERICA_ERROR_INTERNO)
                     .build();
         } else if (body instanceof String corpo) {
             body = Error.builder()
                     .title(corpo)
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now(ZoneId.of("UTC")))
                     .userMessage(MSG_GENERICA_ERROR_INTERNO)
                     .build();
         }
@@ -256,7 +257,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(errorType.getUri())
                 .detail(detail)
                 .status(status.value())
-                .timestamp(LocalDateTime.now());
+                .timestamp(OffsetDateTime.now(ZoneId.of("UTC")));
     }
 
 }

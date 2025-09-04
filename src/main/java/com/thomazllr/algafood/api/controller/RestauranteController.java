@@ -1,5 +1,9 @@
 package com.thomazllr.algafood.api.controller;
 
+import com.thomazllr.algafood.api.assembler.RestauranteModelAssembler;
+import com.thomazllr.algafood.api.disassembler.RestauranteInputDisassembler;
+import com.thomazllr.algafood.api.model.RestauranteModel;
+import com.thomazllr.algafood.api.model.input.RestauranteInput;
 import com.thomazllr.algafood.domain.Restaurante;
 import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
@@ -21,23 +25,34 @@ public class RestauranteController {
 
     private final RestauranteRepository repository;
     private final RestauranteService service;
+    private final RestauranteModelAssembler assembler;
+    private final RestauranteInputDisassembler disassembler;
 
     @GetMapping
-    public List<Restaurante> listar() {
-        return repository.findAll();
+    public List<RestauranteModel> listar() {
+        return assembler.toCollectionModel(repository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurante> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<RestauranteModel> buscarPorId(@PathVariable Long id) {
         var restaurante = service.buscarOuFalhar(id);
-        return ResponseEntity.ok(restaurante);
+
+        var model = assembler.toModel(restaurante);
+
+        return ResponseEntity.ok(model);
     }
 
     @PostMapping
-    public ResponseEntity<Restaurante> salvar(@RequestBody @Valid Restaurante restaurante) {
+    public ResponseEntity<RestauranteModel> salvar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
+
+            var restaurante = disassembler.toEntity(restauranteInput);
+
             service.salvar(restaurante);
-            return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
+
+            var model = assembler.toModel(restaurante);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(model);
         } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }

@@ -4,6 +4,7 @@ import com.thomazllr.algafood.domain.Cidade;
 import com.thomazllr.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
 import com.thomazllr.algafood.domain.repository.CidadeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class CidadeService {
     private final CidadeRepository repository;
     private final EstadoService estadoService;
 
+    @Transactional
     public Cidade salvar(Cidade cidade) {
 
         var estadoId = cidade.getEstado().getId();

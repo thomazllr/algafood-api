@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -12,7 +12,8 @@ import java.util.List;
 @Builder
 public class Error {
     @Builder
-    public record FieldError(String name, String message) {}
+    public record FieldError(String name, String message) {
+    }
 
     private Integer status;
     private String type;
@@ -20,7 +21,7 @@ public class Error {
     private String detail;
 
     private String userMessage;
-    private LocalDateTime timestamp;
+    private OffsetDateTime timestamp;
     private List<FieldError> fields;
 
 }

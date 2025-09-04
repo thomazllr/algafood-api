@@ -1,9 +1,9 @@
 package com.thomazllr.algafood.domain.service;
 
 import com.thomazllr.algafood.domain.Restaurante;
-import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class RestauranteService {
 
-    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Entidade de Restaurante de ID: %d não encontrada";
-
     private final RestauranteRepository repository;
     private final CozinhaService cozinhaService;
 
+    @Transactional
     public Restaurante salvar(Restaurante restaurante) {
 
         var cozinhaId = restaurante.getCozinha().getId();

@@ -1,6 +1,5 @@
 package com.thomazllr.algafood.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +28,6 @@ public class Produto {
 
     private boolean ativo;
 
-    @JsonIgnore
     @ManyToOne
     private Restaurante restaurante;
 }
