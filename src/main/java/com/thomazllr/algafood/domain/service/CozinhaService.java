@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.domain.service;
 
-import com.thomazllr.algafood.domain.Cozinha;
+import com.thomazllr.algafood.domain.entity.Cozinha;
 import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;

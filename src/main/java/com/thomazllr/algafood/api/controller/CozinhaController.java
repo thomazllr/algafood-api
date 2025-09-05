@@ -4,7 +4,7 @@ import com.thomazllr.algafood.api.assembler.cozinha.CozinhaInputDisassembler;
 import com.thomazllr.algafood.api.assembler.cozinha.CozinhaModelAssembler;
 import com.thomazllr.algafood.api.model.CozinhaModel;
 import com.thomazllr.algafood.api.model.input.cozinha.CozinhaInput;
-import com.thomazllr.algafood.domain.Cozinha;
+import com.thomazllr.algafood.domain.entity.Cozinha;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;
 import com.thomazllr.algafood.domain.service.CozinhaService;
 import jakarta.validation.Valid;

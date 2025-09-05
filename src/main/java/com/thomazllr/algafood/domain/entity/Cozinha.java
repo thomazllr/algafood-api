@@ -1,12 +1,11 @@
-package com.thomazllr.algafood.domain;
+package com.thomazllr.algafood.domain.entity;
 
-import com.thomazllr.algafood.core.validations.Groups;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.groups.ConvertGroup;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-public class Cidade {
+public class Cozinha {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +25,7 @@ public class Cidade {
     @NotBlank
     private String nome;
 
-    @Valid
-    @NotNull
-    @ConvertGroup(to = Groups.EstadoId.class)
-    @ManyToOne
-    private Estado estado;
+    @OneToMany(mappedBy = "cozinha")
+    private List<Restaurante> restaurantes = new ArrayList<>();
+
 }

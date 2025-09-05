@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.domain.service;
 
-import com.thomazllr.algafood.domain.Estado;
+import com.thomazllr.algafood.domain.entity.Estado;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
 import com.thomazllr.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.thomazllr.algafood.domain.repository.EstadoRepository;

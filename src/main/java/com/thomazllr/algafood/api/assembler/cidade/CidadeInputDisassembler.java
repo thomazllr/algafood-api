@@ -1,7 +1,7 @@
 package com.thomazllr.algafood.api.assembler.cidade;
 
 import com.thomazllr.algafood.api.model.input.cidade.CidadeInput;
-import com.thomazllr.algafood.domain.Cidade;
+import com.thomazllr.algafood.domain.entity.Cidade;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

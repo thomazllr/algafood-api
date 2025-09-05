@@ -1,13 +1,6 @@
-package com.thomazllr.algafood.domain;
+package com.thomazllr.algafood.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.thomazllr.algafood.core.validations.Groups;
-import com.thomazllr.algafood.core.validations.TaxaFrete;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.groups.ConvertGroup;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -60,4 +53,14 @@ public class Restaurante {
     @UpdateTimestamp
     @Column(nullable = false)
     private OffsetDateTime dataAtualizacao;
+
+    private Boolean ativo = Boolean.TRUE;
+
+    public void ativar() {
+        setAtivo(true);
+    }
+
+    public void inativar() {
+        setAtivo(false);
+    }
 }

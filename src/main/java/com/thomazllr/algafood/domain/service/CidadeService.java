@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.domain.service;
 
-import com.thomazllr.algafood.domain.Cidade;
+import com.thomazllr.algafood.domain.entity.Cidade;
 import com.thomazllr.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
 import com.thomazllr.algafood.domain.repository.CidadeRepository;

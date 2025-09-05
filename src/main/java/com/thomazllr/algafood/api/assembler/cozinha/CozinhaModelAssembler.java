@@ -1,7 +1,7 @@
 package com.thomazllr.algafood.api.assembler.cozinha;
 
 import com.thomazllr.algafood.api.model.CozinhaModel;
-import com.thomazllr.algafood.domain.Cozinha;
+import com.thomazllr.algafood.domain.entity.Cozinha;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

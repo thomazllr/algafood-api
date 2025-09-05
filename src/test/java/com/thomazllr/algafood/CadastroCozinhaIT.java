@@ -1,6 +1,6 @@
 package com.thomazllr.algafood;
 
-import com.thomazllr.algafood.domain.Cozinha;
+import com.thomazllr.algafood.domain.entity.Cozinha;
 import com.thomazllr.algafood.domain.repository.CozinhaRepository;
 import com.thomazllr.algafood.util.DatabaseCleaner;
 import io.restassured.RestAssured;

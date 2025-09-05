@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.domain.repository;
 
-import com.thomazllr.algafood.domain.Restaurante;
+import com.thomazllr.algafood.domain.entity.Restaurante;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 

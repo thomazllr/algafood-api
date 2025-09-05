@@ -2,11 +2,9 @@ package com.thomazllr.algafood.api.controller;
 
 import com.thomazllr.algafood.api.assembler.cidade.CidadeInputDisassembler;
 import com.thomazllr.algafood.api.assembler.cidade.CidadeModelAssembler;
-import com.thomazllr.algafood.api.assembler.estado.EstadoInputDisassembler;
-import com.thomazllr.algafood.api.assembler.estado.EstadoModelAssembler;
 import com.thomazllr.algafood.api.model.CidadeModel;
 import com.thomazllr.algafood.api.model.input.cidade.CidadeInput;
-import com.thomazllr.algafood.domain.Cidade;
+import com.thomazllr.algafood.domain.entity.Cidade;
 import com.thomazllr.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
 import com.thomazllr.algafood.domain.repository.CidadeRepository;
@@ -31,8 +29,8 @@ public class CidadeController {
     private final CidadeInputDisassembler disassembler;
 
     @GetMapping
-    public List<Cidade> listar() {
-        return repository.findAll();
+    public List<CidadeModel> listar() {
+        return assembler.toCollectionModel(repository.findAll());
     }
 
     @GetMapping("/{id}")

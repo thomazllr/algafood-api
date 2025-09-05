@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.domain.repository;
 
-import com.thomazllr.algafood.domain.Cozinha;
+import com.thomazllr.algafood.domain.entity.Cozinha;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.thomazllr.algafood.api.assembler.estado;
 
 import com.thomazllr.algafood.api.model.EstadoModel;
-import com.thomazllr.algafood.domain.Estado;
+import com.thomazllr.algafood.domain.entity.Estado;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

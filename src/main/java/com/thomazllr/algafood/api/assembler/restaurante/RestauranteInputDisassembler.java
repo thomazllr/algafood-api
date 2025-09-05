@@ -1,8 +1,8 @@
 package com.thomazllr.algafood.api.assembler.restaurante;
 
 import com.thomazllr.algafood.api.model.input.restaurante.RestauranteInput;
-import com.thomazllr.algafood.domain.Cozinha;
-import com.thomazllr.algafood.domain.Restaurante;
+import com.thomazllr.algafood.domain.entity.Cozinha;
+import com.thomazllr.algafood.domain.entity.Restaurante;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

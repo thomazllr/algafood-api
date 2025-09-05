@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.infrastructure;
 
-import com.thomazllr.algafood.domain.Restaurante;
+import com.thomazllr.algafood.domain.entity.Restaurante;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
 import com.thomazllr.algafood.domain.repository.RestauranteRepositoryQueries;
 import jakarta.persistence.EntityManager;

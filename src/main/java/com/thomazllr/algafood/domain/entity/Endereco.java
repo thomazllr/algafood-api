@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.domain;
+package com.thomazllr.algafood.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
