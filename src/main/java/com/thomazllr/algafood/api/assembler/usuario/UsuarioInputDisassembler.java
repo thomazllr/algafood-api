@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.api.assembler.usuario;
 
 import com.thomazllr.algafood.api.model.input.usuario.UsuarioInput;
+import com.thomazllr.algafood.api.model.input.usuario.UsuarioUpdateInput;
 import com.thomazllr.algafood.domain.entity.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,7 +17,7 @@ public class UsuarioInputDisassembler {
         return modelMapper.map(input, Usuario.class);
     }
 
-    public void copyToDomainObject(UsuarioInput input, Usuario usuario) {
+    public void copyToDomainObject(UsuarioUpdateInput input, Usuario usuario) {
         modelMapper.map(input, usuario);
     }
 

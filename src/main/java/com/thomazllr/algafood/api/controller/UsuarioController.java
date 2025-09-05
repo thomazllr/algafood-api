@@ -1,9 +1,11 @@
 package com.thomazllr.algafood.api.controller;
 
+import com.thomazllr.algafood.api.model.input.senha.SenhaInput;
 import com.thomazllr.algafood.api.assembler.usuario.UsuarioInputDisassembler;
 import com.thomazllr.algafood.api.assembler.usuario.UsuarioModelAssembler;
 import com.thomazllr.algafood.api.model.UsuarioModel;
 import com.thomazllr.algafood.api.model.input.usuario.UsuarioInput;
+import com.thomazllr.algafood.api.model.input.usuario.UsuarioUpdateInput;
 import com.thomazllr.algafood.domain.repository.UsuarioRepository;
 import com.thomazllr.algafood.domain.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -47,7 +49,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioModel> atualizar(@PathVariable Long id, @RequestBody @Valid UsuarioInput usuario) {
+    public ResponseEntity<UsuarioModel> atualizar(@PathVariable Long id, @RequestBody @Valid UsuarioUpdateInput usuario) {
         var usuarioEncontrado = service.buscarOuFalhar(id);
         disassembler.copyToDomainObject(usuario, usuarioEncontrado);
         usuarioEncontrado = service.salvar(usuarioEncontrado);
@@ -60,5 +62,12 @@ public class UsuarioController {
         service.remover(id);
         return ResponseEntity.noContent().build();
     }
-    
+
+    @PutMapping("{id}/senha")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizarSenha(@PathVariable Long id, @RequestBody @Valid SenhaInput input) {
+        service.atualizarSenha(id, input.getSenha(), input.getSenhaNova());
+
+    }
+
 }
