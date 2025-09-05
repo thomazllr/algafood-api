@@ -13,12 +13,18 @@ public class RestauranteService {
 
     private final RestauranteRepository repository;
     private final CozinhaService cozinhaService;
+    private final CidadeService cidadeService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         var cozinhaId = restaurante.getCozinha().getId();
+        var cidadeId = restaurante.getEndereco().getCidade().getId();
+
         var cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
+        var cidade = cidadeService.buscarOuFalhar(cidadeId);
+
         restaurante.setCozinha(cozinha);
+        restaurante.getEndereco().setCidade(cidade);
         return repository.save(restaurante);
     }
 

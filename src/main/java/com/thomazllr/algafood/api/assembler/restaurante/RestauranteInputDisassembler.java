@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.api.assembler.restaurante;
 
 import com.thomazllr.algafood.api.model.input.restaurante.RestauranteInput;
+import com.thomazllr.algafood.domain.entity.Cidade;
 import com.thomazllr.algafood.domain.entity.Cozinha;
 import com.thomazllr.algafood.domain.entity.Restaurante;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,10 @@ public class RestauranteInputDisassembler {
 
         // Para evitar exception que o JPA acha que a gente tá tentando alterar um ID de uma cozinha para outro
         restaurante.setCozinha(new Cozinha());
+
+        if (restaurante.getEndereco() != null) {
+            restaurante.getEndereco().setCidade(new Cidade());
+        }
 
         modelMapper.map(input, restaurante);
     }

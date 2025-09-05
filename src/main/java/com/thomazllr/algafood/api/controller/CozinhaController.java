@@ -53,7 +53,7 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long id, @RequestBody CozinhaInput cozinha) {
+    public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long id, @RequestBody @Valid CozinhaInput cozinha) {
         var cozinhaEncontrada = service.buscarOuFalhar(id);
         disassembler.copyToDomainObject(cozinha, cozinhaEncontrada);
         Cozinha cozinhaSalva = service.salvar(cozinhaEncontrada);

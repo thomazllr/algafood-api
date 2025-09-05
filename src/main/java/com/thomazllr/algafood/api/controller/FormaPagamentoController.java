@@ -6,6 +6,7 @@ import com.thomazllr.algafood.api.model.FormaPagamentoModel;
 import com.thomazllr.algafood.api.model.input.formapagamento.FormaPagamentoInput;
 import com.thomazllr.algafood.domain.repository.FormaPagamentoRepository;
 import com.thomazllr.algafood.domain.service.FormaPagamentoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class FormaPagamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<FormaPagamentoModel> salvar(@RequestBody FormaPagamentoInput input) {
+    public ResponseEntity<FormaPagamentoModel> salvar(@RequestBody @Valid FormaPagamentoInput input) {
 
         var formaPagamento = disassembler.toEntity(input);
         service.salvar(formaPagamento);
@@ -46,7 +47,7 @@ public class FormaPagamentoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FormaPagamentoModel> atualizar(@PathVariable Long id, @RequestBody FormaPagamentoInput formaPagamento) {
+    public ResponseEntity<FormaPagamentoModel> atualizar(@PathVariable Long id, @RequestBody @Valid FormaPagamentoInput formaPagamento) {
         var formaPagamentoEncontrado = service.buscarOuFalhar(id);
         disassembler.copyToDomainObject(formaPagamento, formaPagamentoEncontrado);
         formaPagamentoEncontrado = service.salvar(formaPagamentoEncontrado);

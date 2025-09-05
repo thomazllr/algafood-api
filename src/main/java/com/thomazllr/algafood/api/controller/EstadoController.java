@@ -6,6 +6,7 @@ import com.thomazllr.algafood.api.model.EstadoModel;
 import com.thomazllr.algafood.api.model.input.estado.EstadoInput;
 import com.thomazllr.algafood.domain.repository.EstadoRepository;
 import com.thomazllr.algafood.domain.service.EstadoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class EstadoController {
     }
 
     @PostMapping
-    public ResponseEntity<EstadoModel> salvar(@RequestBody EstadoInput input) {
+    public ResponseEntity<EstadoModel> salvar(@RequestBody @Valid EstadoInput input) {
 
         var estado = disassembler.toEntity(input);
         service.salvar(estado);

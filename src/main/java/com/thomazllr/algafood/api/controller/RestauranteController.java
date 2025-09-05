@@ -1,9 +1,10 @@
 package com.thomazllr.algafood.api.controller;
 
-import com.thomazllr.algafood.api.assembler.restaurante.RestauranteModelAssembler;
 import com.thomazllr.algafood.api.assembler.restaurante.RestauranteInputDisassembler;
+import com.thomazllr.algafood.api.assembler.restaurante.RestauranteModelAssembler;
 import com.thomazllr.algafood.api.model.RestauranteModel;
 import com.thomazllr.algafood.api.model.input.restaurante.RestauranteInput;
+import com.thomazllr.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
@@ -51,7 +52,7 @@ public class RestauranteController {
             var model = assembler.toModel(restaurante);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(model);
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
@@ -65,7 +66,7 @@ public class RestauranteController {
 
             restauranteEncontrado = service.salvar(restauranteEncontrado);
             return ResponseEntity.ok(assembler.toModel(restauranteEncontrado));
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
     }
