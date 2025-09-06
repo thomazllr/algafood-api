@@ -14,6 +14,7 @@ public class RestauranteService {
     private final RestauranteRepository repository;
     private final CozinhaService cozinhaService;
     private final CidadeService cidadeService;
+    private final FormaPagamentoService formaPagamentoService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -48,6 +49,20 @@ public class RestauranteService {
     public void inativar(Long id) {
         Restaurante restaurante = buscarOuFalhar(id);
         restaurante.inativar();
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        var restaurante = this.buscarOuFalhar(restauranteId);
+        var formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+        restaurante.disassociarFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        var restaurante = this.buscarOuFalhar(restauranteId);
+        var formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+        restaurante.associarFormaPagamento(formaPagamento);
     }
 
 
