@@ -17,8 +17,6 @@ public class GrupoPermissaoController {
 
     private final GrupoService grupoService;
 
-    private final PermissaoService permissaoService;
-
     private final PermissaoModelAssembler permissaoModelAssembler;
 
     @GetMapping
@@ -31,12 +29,12 @@ public class GrupoPermissaoController {
     @PutMapping("{permissaoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
-        permissaoService.associar(grupoId, permissaoId);
+        grupoService.associarPermissao(grupoId, permissaoId);
     }
 
     @DeleteMapping("{permissaoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
-        permissaoService.desassociar(grupoId, permissaoId);
+        grupoService.desassociarPermissao(grupoId, permissaoId);
     }
 }

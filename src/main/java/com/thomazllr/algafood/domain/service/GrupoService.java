@@ -4,6 +4,7 @@ import com.thomazllr.algafood.domain.entity.Grupo;
 import com.thomazllr.algafood.domain.exception.EntidadeEmUsoException;
 import com.thomazllr.algafood.domain.exception.GrupoNaoEncontradoException;
 import com.thomazllr.algafood.domain.repository.GrupoRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public class GrupoService {
     public static final String MSG_GRUPO_EM_USO = "Grupo de ID: %d está em uso";
 
     private final GrupoRepository repository;
+
+    private final PermissaoService permissaoService;
 
     public Grupo salvar(Grupo grupo) {
         return repository.save(grupo);
@@ -35,6 +38,21 @@ public class GrupoService {
     public Grupo buscarOuFalhar(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GrupoNaoEncontradoException(id));
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        var grupo = this.buscarOuFalhar(grupoId);
+        var permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.associarPermissao(permissao);
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        var grupo = this.buscarOuFalhar(grupoId);
+        var permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.desassociarPermissao(permissao);
+
     }
 
 }

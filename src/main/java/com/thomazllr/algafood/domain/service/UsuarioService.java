@@ -16,6 +16,8 @@ public class UsuarioService {
 
     private final UsuarioRepository repository;
 
+    private final GrupoService grupoService;
+
     @Transactional
     public Usuario salvar(Usuario usuario) {
 
@@ -51,6 +53,20 @@ public class UsuarioService {
 
         usuario.setSenha(novaSenha);
         this.salvar(usuario);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        var usuario = this.buscarOuFalhar(usuarioId);
+        var grupo = grupoService.buscarOuFalhar(grupoId);
+        usuario.adicionarGrupo(grupo);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        var usuario = this.buscarOuFalhar(usuarioId);
+        var grupo = grupoService.buscarOuFalhar(grupoId);
+        usuario.removerGrupo(grupo);
     }
 
 

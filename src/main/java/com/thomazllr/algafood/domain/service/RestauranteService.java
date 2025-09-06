@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class RestauranteService {
@@ -46,9 +48,19 @@ public class RestauranteService {
     }
 
     @Transactional
+    public void ativar(List<Long> ids) {
+        ids.forEach(this::ativar);
+    }
+
+    @Transactional
     public void inativar(Long id) {
         Restaurante restaurante = buscarOuFalhar(id);
         restaurante.inativar();
+    }
+
+    @Transactional
+    public void inativar(List<Long> ids) {
+        ids.forEach(this::inativar);
     }
 
     @Transactional

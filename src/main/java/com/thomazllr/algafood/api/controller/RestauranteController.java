@@ -7,6 +7,7 @@ import com.thomazllr.algafood.api.model.input.restaurante.RestauranteInput;
 import com.thomazllr.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.thomazllr.algafood.domain.exception.NegocioException;
+import com.thomazllr.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
 import com.thomazllr.algafood.domain.service.RestauranteService;
 import jakarta.validation.Valid;
@@ -82,6 +83,26 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativar(@PathVariable Long id) {
         service.inativar(id);
+    }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> ids) {
+        try {
+            service.ativar(ids);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativarMultiplos(@RequestBody List<Long> ids) {
+        try {
+            service.inativar(ids);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 
     @DeleteMapping("/{id}")
