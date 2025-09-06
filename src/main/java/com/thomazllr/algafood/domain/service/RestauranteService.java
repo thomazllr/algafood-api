@@ -52,6 +52,18 @@ public class RestauranteService {
     }
 
     @Transactional
+    public void abrir(Long id) {
+        Restaurante restaurante = buscarOuFalhar(id);
+        restaurante.abrir();
+    }
+
+    @Transactional
+    public void fechar(Long id) {
+        Restaurante restaurante = buscarOuFalhar(id);
+        restaurante.fechar();
+    }
+
+    @Transactional
     public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
         var restaurante = this.buscarOuFalhar(restauranteId);
         var formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);

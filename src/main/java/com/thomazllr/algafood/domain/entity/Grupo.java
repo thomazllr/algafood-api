@@ -3,8 +3,8 @@ package com.thomazllr.algafood.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,5 +27,14 @@ public class Grupo {
     @JoinTable(name = "grupo_permissao",
             joinColumns = @JoinColumn(name = "grupo_id"),
             inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-    private List<Permissao> permissoes = new ArrayList<>();
+    private Set<Permissao> permissoes = new HashSet<>();
+
+
+    public boolean associarPermissao(Permissao permissao) {
+        return getPermissoes().add(permissao);
+    }
+
+    public boolean desassociarPermissao(Permissao permissao) {
+        return getPermissoes().remove(permissao);
+    }
 }
