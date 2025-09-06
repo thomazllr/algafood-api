@@ -39,20 +39,33 @@ public class Pedido {
 
     private OffsetDateTime dataEntrega;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private FormaPagamento formaPagamento;
 
     @ManyToOne
     private Restaurante restaurante;
 
     @ManyToOne
+    @JoinColumn(name = "usuario_cliente_id")
     private Usuario cliente;
 
     @Embedded
     private Endereco enderecoEntrega;
 
-    private StatusPedido status;
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status = StatusPedido.CRIADO;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itens = new ArrayList<>();
+
+    public void calcularValorTotal() {
+        this.subtotal = this.itens.stream()
+                .map(ItemPedido::getPrecoTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.valorTotal = this.subtotal.add(this.taxaFrete != null ? this.taxaFrete : BigDecimal.ZERO);
+    }
+
+
+
 }

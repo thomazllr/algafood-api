@@ -19,8 +19,5 @@ spring:
       fail-on-unknown-properties: true
       fail-on-ignored-properties: true
 server:
-  tomcat:
-    threads:
-      max: 20
   error:
     include-stacktrace: on_param

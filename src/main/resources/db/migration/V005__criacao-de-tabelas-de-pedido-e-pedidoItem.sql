@@ -1,5 +1,6 @@
 create table pedido (
 	id bigint not null auto_increment,
+    subtotal decimal(10,2) not null,
 	taxa_frete decimal(10,2) not null,
 	valor_total decimal(10,2) not null,
 
@@ -31,7 +32,7 @@ create table item_pedido (
     quantidade int not null,
     preco_unitario decimal(10,2) not null,
     preco_Total decimal(10,2) not null,
-    observacao varchar(20) null,
+    observacao varchar(255) null,
 
     primary key (id)
 ) engine=InnoDB default charset=utf8;

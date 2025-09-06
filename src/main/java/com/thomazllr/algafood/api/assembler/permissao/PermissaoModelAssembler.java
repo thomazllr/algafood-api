@@ -1,6 +1,6 @@
 package com.thomazllr.algafood.api.assembler.permissao;
 
-import com.thomazllr.algafood.api.model.input.PermissaoModel;
+import com.thomazllr.algafood.api.model.PermissaoModel;
 import com.thomazllr.algafood.domain.entity.Permissao;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

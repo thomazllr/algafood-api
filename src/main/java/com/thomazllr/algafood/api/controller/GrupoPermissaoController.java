@@ -1,9 +1,8 @@
 package com.thomazllr.algafood.api.controller;
 
 import com.thomazllr.algafood.api.assembler.permissao.PermissaoModelAssembler;
-import com.thomazllr.algafood.api.model.input.PermissaoModel;
+import com.thomazllr.algafood.api.model.PermissaoModel;
 import com.thomazllr.algafood.domain.service.GrupoService;
-import com.thomazllr.algafood.domain.service.PermissaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

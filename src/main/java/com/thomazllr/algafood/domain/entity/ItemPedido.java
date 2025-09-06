@@ -33,4 +33,14 @@ public class ItemPedido {
 
     @ManyToOne
     private Pedido pedido;
+
+
+    public void calcularPrecoTotal() {
+        if (precoUnitario == null || quantidade == null) {
+            this.precoTotal = BigDecimal.ZERO;
+        } else {
+            this.precoTotal = precoUnitario.multiply(BigDecimal.valueOf(quantidade));
+        }
+    }
+
 }
