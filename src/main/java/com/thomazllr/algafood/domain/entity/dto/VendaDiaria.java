@@ -15,4 +15,5 @@ public class VendaDiaria {
     private LocalDate data;
     private Long totalVendas;
     private BigDecimal totalFaturado;
+
 }
