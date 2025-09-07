@@ -4,10 +4,8 @@ import com.thomazllr.algafood.api.assembler.usuario.UsuarioModelAssembler;
 import com.thomazllr.algafood.api.model.UsuarioModel;
 import com.thomazllr.algafood.domain.service.RestauranteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,4 +24,18 @@ public class RestauranteUsuarioResponsavelController {
         return usuarioModelAssembler.toCollectionModel(usuarios);
 
     }
+
+    @PutMapping("/{usuarioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+        restauranteService.associarResponsavel(restauranteId, usuarioId);
+    }
+
+    @DeleteMapping("/{usuarioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
+        restauranteService.desassociarResponsavel(restauranteId, usuarioId);
+    }
+
+
 }

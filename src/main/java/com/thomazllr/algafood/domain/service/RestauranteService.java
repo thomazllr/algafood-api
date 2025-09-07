@@ -17,6 +17,7 @@ public class RestauranteService {
     private final CozinhaService cozinhaService;
     private final CidadeService cidadeService;
     private final FormaPagamentoService formaPagamentoService;
+    private final UsuarioService usuarioService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -76,6 +77,14 @@ public class RestauranteService {
     }
 
     @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        var restaurante = this.buscarOuFalhar(restauranteId);
+        var formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+        restaurante.associarFormaPagamento(formaPagamento);
+    }
+
+
+    @Transactional
     public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
         var restaurante = this.buscarOuFalhar(restauranteId);
         var formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
@@ -83,10 +92,19 @@ public class RestauranteService {
     }
 
     @Transactional
-    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
-        var restaurante = this.buscarOuFalhar(restauranteId);
-        var formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
-        restaurante.associarFormaPagamento(formaPagamento);
+    public void associarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        var usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+        restaurante.associarUsuarioResponsavel(usuario);
+    }
+
+    @Transactional
+    public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+        var restaurante = buscarOuFalhar(restauranteId);
+        var usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+        restaurante.disassociarUsuarioResponsavel(usuario);
     }
 
 
