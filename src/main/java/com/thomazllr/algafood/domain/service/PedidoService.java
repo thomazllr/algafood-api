@@ -20,8 +20,8 @@ public class PedidoService {
     private final UsuarioService usuarioService;
     private final FormaPagamentoService formaPagamentoService;
 
-    public Pedido buscarOuFalhar(Long id) {
-        return repository.findById(id).orElseThrow(() -> new PedidoNaoEncontradoException(id));
+    public Pedido buscarOuFalhar(String codigo) {
+        return repository.findByCodigo(codigo).orElseThrow(() -> new PedidoNaoEncontradoException(codigo));
     }
 
     @Transactional

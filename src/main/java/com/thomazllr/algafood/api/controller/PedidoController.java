@@ -6,14 +6,12 @@ import com.thomazllr.algafood.api.assembler.pedido.PedidoResumoModelAssembler;
 import com.thomazllr.algafood.api.model.PedidoModel;
 import com.thomazllr.algafood.api.model.PedidoResumoModel;
 import com.thomazllr.algafood.api.model.input.pedido.PedidoInput;
-import com.thomazllr.algafood.domain.entity.ItemPedido;
 import com.thomazllr.algafood.domain.repository.PedidoRepository;
 import com.thomazllr.algafood.domain.service.PedidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -34,9 +32,9 @@ public class PedidoController {
         return pedidoResumoModelAssembler.toCollectionModel(pedidos);
     }
 
-    @GetMapping("{id}")
-    public PedidoModel pedidoPorId(@PathVariable Long id) {
-        var pedido = service.buscarOuFalhar(id);
+    @GetMapping("/{codigoPedido}")
+    public PedidoModel pedidoPorId(@PathVariable String codigoPedido) {
+        var pedido = service.buscarOuFalhar(codigoPedido);
         return assembler.toModel(pedido);
     }
 

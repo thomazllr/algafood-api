@@ -11,15 +11,16 @@ import java.util.List;
 @Setter
 public class PedidoModel {
 
-    private Long id;
+    private String codigo;
     private String status;
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
     private BigDecimal valorTotal;
-    private List<ItemPedidoModel> itens;
     private OffsetDateTime dataCriacao;
+    private OffsetDateTime dataConfirmacao;
     private OffsetDateTime dataEntrega;
     private OffsetDateTime dataCancelamento;
+    private List<ItemPedidoModel> itens;
     private RestauranteResumidoModel restaurante;
     private FormaPagamentoModel formaPagamento;
     private UsuarioModel cliente;

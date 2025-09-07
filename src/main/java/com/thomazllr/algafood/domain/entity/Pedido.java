@@ -1,5 +1,6 @@
 package com.thomazllr.algafood.domain.entity;
 
+import com.thomazllr.algafood.domain.exception.NegocioException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,6 +25,8 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    private String codigo;
 
     private BigDecimal subtotal;
 
@@ -66,6 +70,35 @@ public class Pedido {
         this.valorTotal = this.subtotal.add(this.taxaFrete != null ? this.taxaFrete : BigDecimal.ZERO);
     }
 
+    public void confirmar() {
+        setStatus(StatusPedido.CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    public void entregar() {
+        setStatus(StatusPedido.ENTREGUE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+
+    public void cancelar() {
+        setStatus(StatusPedido.CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+
+    @PrePersist
+    public void gerarCodigo() {
+        setCodigo(UUID.randomUUID().toString());
+    }
+
+    private void setStatus(StatusPedido status) {
+
+        if (getStatus().naoPodeAlterarPara(status)) {
+            throw new NegocioException("Pedido de ID %s não pode ser alterado de %s para %s".formatted(getCodigo(),
+                    getStatus().getDescricao(), status.getDescricao()));
+        }
+
+        this.status = status;
+    }
 
 
 }
