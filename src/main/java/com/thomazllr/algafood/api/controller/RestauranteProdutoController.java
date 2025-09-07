@@ -5,6 +5,8 @@ import com.thomazllr.algafood.api.assembler.produto.ProdutoInputDisassembler;
 import com.thomazllr.algafood.api.assembler.produto.ProdutoModelAssembler;
 import com.thomazllr.algafood.api.model.ProdutoModel;
 import com.thomazllr.algafood.api.model.input.produto.ProdutoInput;
+import com.thomazllr.algafood.domain.entity.Produto;
+import com.thomazllr.algafood.domain.repository.ProdutoRepository;
 import com.thomazllr.algafood.domain.service.ProdutoService;
 import com.thomazllr.algafood.domain.service.RestauranteService;
 import jakarta.validation.Valid;
@@ -24,14 +26,21 @@ public class RestauranteProdutoController {
 
     private final ProdutoService produtoService;
 
+    private final ProdutoRepository produtoRepository;
+
     private final ProdutoModelAssembler produtoModelAssembler;
 
     private final ProdutoInputDisassembler produtoInputDisassembler;
 
     @GetMapping
-    public List<ProdutoModel> listar(@PathVariable Long id) {
+    public List<ProdutoModel> listar(@RequestParam(required = false) Boolean incluirInativos,
+                                     @PathVariable Long id) {
         var restaurante = restauranteService.buscarOuFalhar(id);
-        var produtos = restaurante.getProdutos();
+        List<Produto> produtos = produtoRepository.findAtivosByRestaurante(restaurante);
+
+        if (Boolean.TRUE.equals(incluirInativos))
+            produtos = produtoRepository.findProdutosByRestaurante(restaurante);
+
         return produtoModelAssembler.toCollectionModel(produtos);
     }
 

@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.domain.service;
 
 import com.thomazllr.algafood.domain.entity.Produto;
+import com.thomazllr.algafood.domain.entity.Restaurante;
 import com.thomazllr.algafood.domain.exception.ProdutoNaoEncontradoException;
 import com.thomazllr.algafood.domain.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,9 @@ public class ProdutoService {
 
     public Produto buscarOuFalhar(Long restauranteId, Long produtoId) {
 
-        restauranteService.buscarOuFalhar(restauranteId);
+        Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
 
-        return repository.findById(restauranteId, produtoId)
+        return repository.findById(restaurante, produtoId)
                 .orElseThrow(() -> new ProdutoNaoEncontradoException(produtoId, restauranteId));
 
     }
