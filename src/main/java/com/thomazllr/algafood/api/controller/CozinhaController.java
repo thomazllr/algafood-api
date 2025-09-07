@@ -9,6 +9,10 @@ import com.thomazllr.algafood.domain.repository.CozinhaRepository;
 import com.thomazllr.algafood.domain.service.CozinhaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +31,13 @@ public class CozinhaController {
     private final CozinhaInputDisassembler disassembler;
 
     @GetMapping
-    public List<CozinhaModel> listar() {
-        return assembler.toCollectionModel(repository.findAll());
+    public Page<CozinhaModel> listar(@PageableDefault(size = 2) Pageable pageable) {
+
+        Page<Cozinha> cozinhasPage = repository.findAll(pageable);
+
+        List<CozinhaModel> cozinhasModel = cozinhasPage.map(assembler::toModel).getContent();
+
+        return new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalPages());
     }
 
     @GetMapping("/{id}")

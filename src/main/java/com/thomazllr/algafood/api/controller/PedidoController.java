@@ -7,17 +7,18 @@ import com.thomazllr.algafood.api.model.PedidoModel;
 import com.thomazllr.algafood.api.model.PedidoResumoModel;
 import com.thomazllr.algafood.api.model.input.pedido.PedidoInput;
 import com.thomazllr.algafood.domain.repository.PedidoRepository;
-import com.thomazllr.algafood.domain.repository.filter.PedidoFilter;
+import com.thomazllr.algafood.domain.filter.PedidoFilter;
 import com.thomazllr.algafood.domain.service.PedidoService;
-import com.thomazllr.algafood.infrastructure.spec.PedidoSpecs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.thomazllr.algafood.infrastructure.spec.PedidoSpecs.*;
+import static com.thomazllr.algafood.infrastructure.repository.spec.PedidoSpecs.usandoFiltro;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -32,9 +33,12 @@ public class PedidoController {
     private final PedidoInputDisassembler disassembler;
 
     @GetMapping
-    public List<PedidoResumoModel> pedidos(PedidoFilter filtro) {
-        var pedidos = repository.findAll(usandoFiltro(filtro));
-        return pedidoResumoModelAssembler.toCollectionModel(pedidos);
+    public Page<PedidoResumoModel> pedidos(PedidoFilter filtro, Pageable pageable) {
+        var pedidos = repository.findAll(usandoFiltro(filtro), pageable);
+
+        List<PedidoResumoModel> pedidosModel = pedidoResumoModelAssembler.toCollectionModel(pedidos.getContent());
+
+        return new PageImpl<>(pedidosModel, pageable, pedidos.getTotalElements());
     }
 
 

@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.infrastructure;
+package com.thomazllr.algafood.infrastructure.repository;
 
 import com.thomazllr.algafood.domain.entity.Restaurante;
 import com.thomazllr.algafood.domain.repository.RestauranteRepository;
@@ -17,8 +17,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.thomazllr.algafood.infrastructure.spec.RestauranteSpecs.comFreteGratis;
-import static com.thomazllr.algafood.infrastructure.spec.RestauranteSpecs.comNomeSemelhante;
+import static com.thomazllr.algafood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static com.thomazllr.algafood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {

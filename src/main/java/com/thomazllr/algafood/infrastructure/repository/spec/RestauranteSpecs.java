@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.infrastructure.spec;
+package com.thomazllr.algafood.infrastructure.repository.spec;
 
 import com.thomazllr.algafood.domain.entity.Restaurante;
 import org.springframework.data.jpa.domain.Specification;

@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.infrastructure;
+package com.thomazllr.algafood.infrastructure.repository;
 
 import com.thomazllr.algafood.domain.repository.CustomJpaRepository;
 import jakarta.persistence.EntityManager;

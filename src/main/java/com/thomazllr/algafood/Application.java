@@ -1,6 +1,6 @@
 package com.thomazllr.algafood;
 
-import com.thomazllr.algafood.infrastructure.CustomJpaRepositoryImpl;
+import com.thomazllr.algafood.infrastructure.repository.CustomJpaRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
