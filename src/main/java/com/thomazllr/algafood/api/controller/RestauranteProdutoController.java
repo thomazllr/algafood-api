@@ -36,10 +36,10 @@ public class RestauranteProdutoController {
     public List<ProdutoModel> listar(@RequestParam(required = false) Boolean incluirInativos,
                                      @PathVariable Long id) {
         var restaurante = restauranteService.buscarOuFalhar(id);
-        List<Produto> produtos = produtoRepository.findAtivosByRestaurante(restaurante);
 
-        if (Boolean.TRUE.equals(incluirInativos))
-            produtos = produtoRepository.findProdutosByRestaurante(restaurante);
+        List<Produto> produtos = Boolean.TRUE.equals(incluirInativos)
+                ? produtoRepository.findProdutosByRestaurante(restaurante)
+                : produtoRepository.findAtivosByRestaurante(restaurante);
 
         return produtoModelAssembler.toCollectionModel(produtos);
     }

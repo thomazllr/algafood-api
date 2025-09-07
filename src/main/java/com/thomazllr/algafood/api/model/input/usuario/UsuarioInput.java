@@ -1,5 +1,6 @@
 package com.thomazllr.algafood.api.model.input.usuario;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ public class UsuarioInput {
     @NotBlank
     private String nome;
 
+    @Email
     @NotBlank
     private String email;
 
