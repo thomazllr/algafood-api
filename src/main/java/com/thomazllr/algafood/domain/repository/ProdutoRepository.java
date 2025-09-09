@@ -1,5 +1,6 @@
 package com.thomazllr.algafood.domain.repository;
 
+import com.thomazllr.algafood.domain.entity.FotoProduto;
 import com.thomazllr.algafood.domain.entity.Produto;
 import com.thomazllr.algafood.domain.entity.Restaurante;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +10,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProdutoRepository extends JpaRepository<Produto, Long> {
+public interface ProdutoRepository extends JpaRepository<Produto, Long>, ProdutoRepositoryQueries
+{
 
     List<Produto> findProdutosByRestaurante(Restaurante restaurante);
 
@@ -19,5 +21,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query("from Produto where restaurante = :restaurante and ativo = true")
     List<Produto> findAtivosByRestaurante(Restaurante restaurante);
+
+    @Query("select f from FotoProduto f join f.produto p " +
+           "where p.restaurante.id = :restauranteId and f.produto.id = :produtoId")
+    Optional<FotoProduto> findFotoProdutoById(Long restauranteId, Long produtoId);
 
 }

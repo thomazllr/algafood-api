@@ -21,3 +21,7 @@ spring:
 server:
   error:
     include-stacktrace: on_param
+algafood:
+  storage:
+    local:
+      diretorio-fotos: /home/thomazllr/Desktop/catalago
