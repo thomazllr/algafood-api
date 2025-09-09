@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProdutoRepositoryQueryImpl implements ProdutoRepositoryQueries {
+public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -22,9 +22,7 @@ public class ProdutoRepositoryQueryImpl implements ProdutoRepositoryQueries {
     @Transactional
     @Override
     public void delete(FotoProduto foto) {
-        if (foto != null && foto.getProduto() != null) {
-            entityManager.remove(foto);
-        }
+        entityManager.remove(foto);
     }
 
 }

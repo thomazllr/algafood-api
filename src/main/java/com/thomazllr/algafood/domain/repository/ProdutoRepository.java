@@ -10,8 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProdutoRepository extends JpaRepository<Produto, Long>, ProdutoRepositoryQueries
-{
+public interface ProdutoRepository extends JpaRepository<Produto, Long>, ProdutoRepositoryQueries {
 
     List<Produto> findProdutosByRestaurante(Restaurante restaurante);
 
