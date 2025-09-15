@@ -20,25 +20,30 @@ public class CatalagoFotoProdutoService {
     private final FotoStorageService fotoStorageService;
 
     @Transactional
-    public FotoProduto salvar(FotoProduto fotoProduto, InputStream dadosArquivo) {
-        var restauranteId = fotoProduto.getRestauranteId();
-        var produtoId = fotoProduto.getProduto().getId();
+    public FotoProduto salvar(FotoProduto foto, InputStream dadosArquivo) {
+        var restauranteId = foto.getRestauranteId();
+        var produtoId = foto.getProduto().getId();
+        String nomeArquivo = fotoStorageService.gerarNomeArquivo(foto.getNomeArquivo());
+        String nomeArquivoExistente = null;
 
         Optional<FotoProduto> fotoExistente = repository.findFotoProdutoById(restauranteId, produtoId);
 
         if (fotoExistente.isPresent()) {
+            nomeArquivoExistente = fotoExistente.get().getNomeArquivo();
             repository.delete(fotoExistente.get());
         }
 
-        var foto = repository.save(fotoProduto);
+        foto.setNomeArquivo(nomeArquivo);
+
+        foto = repository.save(foto);
         repository.flush();
 
         NovaFoto novaFoto = NovaFoto.builder()
-                .nomeArquivo(fotoProduto.getNomeArquivo())
+                .nomeArquivo(foto.getNomeArquivo())
                 .inputStream(dadosArquivo)
                 .build();
 
-        fotoStorageService.armazenar(novaFoto);
+        fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 
         return foto;
     }
