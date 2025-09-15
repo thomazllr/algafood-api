@@ -25,3 +25,10 @@ algafood:
   storage:
     local:
       diretorio-fotos: /home/thomazllr/Desktop/catalago
+    s3:
+      id-chave-acesso: ${ID_CHAVE_ACESSO}
+      chave-acesso-secreta: ${CHAVE_ACESSO_SECRETA}
+      bucket: algafood-test-thomaz
+      regiao: us-east-1
+      diretorio-fotos: catalogo
+    tipo: s3

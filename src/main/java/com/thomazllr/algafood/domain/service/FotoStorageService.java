@@ -1,6 +1,5 @@
 package com.thomazllr.algafood.domain.service;
 
-import com.thomazllr.algafood.domain.entity.FotoProduto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,7 +12,7 @@ public interface FotoStorageService {
 
     void remover(String nomeArquivo);
 
-    InputStream recuperar(String nomeArquivo);
+    FotoRecuperada recuperar(String nomeArquivo);
 
     default void substituir(String nomeArquivoAntigo, NovaFoto novaFoto) {
         armazenar(novaFoto);
@@ -30,6 +29,22 @@ public interface FotoStorageService {
     @Builder
     class NovaFoto {
         private String nomeArquivo;
+        private String contentType;
         private InputStream inputStream;
+    }
+
+    @Getter
+    @Builder
+    class FotoRecuperada {
+        private String url;
+        private InputStream inputStream;
+
+        public boolean temUrl() {
+            return url != null;
+        }
+
+        public boolean temInputStream() {
+            return inputStream != null;
+        }
     }
 }
