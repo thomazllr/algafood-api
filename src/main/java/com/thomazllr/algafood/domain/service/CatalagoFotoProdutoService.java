@@ -1,6 +1,7 @@
 package com.thomazllr.algafood.domain.service;
 
 import com.thomazllr.algafood.domain.entity.FotoProduto;
+import com.thomazllr.algafood.domain.exception.FotoNaoEncontradaException;
 import com.thomazllr.algafood.domain.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,23 @@ public class CatalagoFotoProdutoService {
         fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 
         return foto;
+    }
+
+    public FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
+        return repository.
+                findFotoProdutoById(restauranteId, produtoId).
+                orElseThrow(() -> new FotoNaoEncontradaException(restauranteId, produtoId));
+
+    }
+
+    public void remover(FotoProduto foto) {
+        var restauranteId = foto.getRestauranteId();
+        var produtoId = foto.getProduto().getId();
+
+        Optional<FotoProduto> fotoExistente = repository.findFotoProdutoById(restauranteId, produtoId);
+
+        fotoExistente.ifPresent(repository::delete);
+
+        fotoStorageService.remover(foto.getNomeArquivo());
     }
 }

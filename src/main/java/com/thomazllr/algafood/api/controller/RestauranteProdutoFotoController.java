@@ -5,15 +5,16 @@ import com.thomazllr.algafood.api.model.FotoProdutoModel;
 import com.thomazllr.algafood.api.model.input.fotoproduto.FotoProdutoInput;
 import com.thomazllr.algafood.domain.entity.FotoProduto;
 import com.thomazllr.algafood.domain.entity.Produto;
+import com.thomazllr.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.thomazllr.algafood.domain.service.CatalagoFotoProdutoService;
+import com.thomazllr.algafood.domain.service.FotoStorageService;
 import com.thomazllr.algafood.domain.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class RestauranteProdutoFotoController {
     private final ProdutoService produtoService;
     private final CatalagoFotoProdutoService catalagoFotoProdutoService;
     private final FotoProdutoModelAssembler assembler;
+    private final FotoStorageService fotoStorageService;
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoInput input) throws IOException {
@@ -45,4 +47,30 @@ public class RestauranteProdutoFotoController {
         return assembler.toModel(fotoSalva);
 
     }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public FotoProdutoModel buscarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        var foto = catalagoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
+        return assembler.toModel(foto);
+    }
+
+    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<InputStreamResource> servirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        try {
+            var foto = catalagoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
+            var inputStream = fotoStorageService.recuperar(foto.getNomeArquivo());
+
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(new InputStreamResource(inputStream));
+
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping
+    public void deletar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        var foto = catalagoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
+        catalagoFotoProdutoService.remover(foto);
+    }
+
 }

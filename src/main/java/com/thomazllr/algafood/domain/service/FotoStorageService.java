@@ -1,9 +1,9 @@
 package com.thomazllr.algafood.domain.service;
 
+import com.thomazllr.algafood.domain.entity.FotoProduto;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -13,7 +13,7 @@ public interface FotoStorageService {
 
     void remover(String nomeArquivo);
 
-    InputStream recuperar(String nomeArquivo) throws FileNotFoundException;
+    InputStream recuperar(String nomeArquivo);
 
     default void substituir(String nomeArquivoAntigo, NovaFoto novaFoto) {
         armazenar(novaFoto);
