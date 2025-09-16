@@ -1,7 +1,6 @@
-package com.thomazllr.algafood.infrastructure.service;
+package com.thomazllr.algafood.infrastructure.service.storage;
 
 import com.thomazllr.algafood.core.storage.StorageProperties;
-import com.thomazllr.algafood.domain.exception.StorageException;
 import com.thomazllr.algafood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;

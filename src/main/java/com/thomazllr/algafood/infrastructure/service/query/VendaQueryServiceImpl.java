@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.infrastructure.service;
+package com.thomazllr.algafood.infrastructure.service.query;
 
 import com.thomazllr.algafood.domain.entity.Pedido;
 import com.thomazllr.algafood.domain.entity.dto.VendaDiaria;

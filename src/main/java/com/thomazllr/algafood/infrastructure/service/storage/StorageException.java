@@ -1,4 +1,4 @@
-package com.thomazllr.algafood.domain.exception;
+package com.thomazllr.algafood.infrastructure.service.storage;
 
 public class StorageException extends RuntimeException{
     public StorageException(String message) {

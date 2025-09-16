@@ -5,13 +5,11 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.thomazllr.algafood.domain.service.FotoStorageService;
-import com.thomazllr.algafood.infrastructure.service.LocalFotoStorageService;
-import com.thomazllr.algafood.infrastructure.service.S3FotoStorageService;
+import com.thomazllr.algafood.infrastructure.service.storage.LocalFotoStorageService;
+import com.thomazllr.algafood.infrastructure.service.storage.S3FotoStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import static com.thomazllr.algafood.core.storage.StorageProperties.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -35,11 +33,10 @@ public class StorageConfig {
 
     @Bean
     public FotoStorageService fotoStorageService() {
-        if(TipoStorage.S3.equals(storageProperties.getTipo())) {
-            return new S3FotoStorageService();
-        }
-        else {
-            return new LocalFotoStorageService();
-        }
+        return switch (storageProperties.getTipo()) {
+            case S3 -> new S3FotoStorageService();
+            case LOCAL -> new LocalFotoStorageService();
+            default -> null;
+        };
     }
 }

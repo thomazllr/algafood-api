@@ -18,10 +18,22 @@ spring:
     deserialization:
       fail-on-unknown-properties: true
       fail-on-ignored-properties: true
+  mail:
+    host: smtp.sendgrid.net
+    port: 587
+    username: apikey
+    password: ${API_EMAIL_KEY}
+  freemarker:
+    settings:
+      locale: pt_BR
 server:
   error:
     include-stacktrace: on_param
 algafood:
+  email:
+    remetente: thomazllrdev@gmail.com
+    impl: sandbox
+    sandbox-destinatario: teste@algafood.com.br
   storage:
     local:
       diretorio-fotos: /home/thomazllr/Desktop/catalago
