@@ -1,5 +1,6 @@
 package com.thomazllr.algafood.domain.entity;
 
+import com.thomazllr.algafood.domain.event.PedidoCanceladoEvent;
 import com.thomazllr.algafood.domain.event.PedidoConfirmadoEvent;
 import com.thomazllr.algafood.domain.exception.NegocioException;
 import jakarta.persistence.*;
@@ -86,6 +87,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public void cancelar() {
         setStatus(StatusPedido.CANCELADO);
         setDataCancelamento(OffsetDateTime.now());
+        registerEvent(new PedidoCanceladoEvent(this));
     }
 
     @PrePersist

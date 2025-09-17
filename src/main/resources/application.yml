@@ -32,7 +32,7 @@ server:
 algafood:
   email:
     remetente: thomazllrdev@gmail.com
-    impl: sandbox
+    impl: smtp
     sandbox-destinatario: teste@algafood.com.br
   storage:
     local:

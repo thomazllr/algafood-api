@@ -213,7 +213,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(fieldError -> {
 
                     String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-
                     return Error.FieldError.builder()
                             .name(fieldError.getField())
                             .message(message)
