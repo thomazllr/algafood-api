@@ -11,8 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.springframework.http.CacheControl.maxAge;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,8 +32,29 @@ public class FormaPagamentoController {
     private final FormaPagamentoInputDisassembler disassembler;
 
     @GetMapping
-    public List<FormaPagamentoModel> listar() {
-        return assembler.toCollectionModel(repository.findAll());
+    public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        String eTag = "0";
+
+        OffsetDateTime dataUltimaAtualizacao = repository.getUltimaDataAtualizacao();
+
+        if (dataUltimaAtualizacao != null) {
+            eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+        }
+
+        if (request.checkNotModified(eTag)) {
+            return null;
+        }
+
+        var formaPagamentos = repository.findAll();
+
+        List<FormaPagamentoModel> collectionModel = assembler.toCollectionModel(formaPagamentos);
+        return ResponseEntity
+                .ok()
+                .cacheControl(maxAge(10, SECONDS))
+                .eTag(eTag)
+                .body(collectionModel);
     }
 
     @GetMapping("/{id}")
