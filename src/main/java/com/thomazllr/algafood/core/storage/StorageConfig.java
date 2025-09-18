@@ -1,15 +1,14 @@
 package com.thomazllr.algafood.core.storage;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.thomazllr.algafood.domain.service.FotoStorageService;
 import com.thomazllr.algafood.infrastructure.service.storage.LocalFotoStorageService;
 import com.thomazllr.algafood.infrastructure.service.storage.S3FotoStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
 @RequiredArgsConstructor
@@ -18,16 +17,16 @@ public class StorageConfig {
     private final StorageProperties storageProperties;
 
     @Bean
-    public AmazonS3 amazonS3() {
-
+    public S3Client s3Client() {
         var chaveAcesso = storageProperties.getS3().getIdChaveAcesso();
         var chaveAcessoSecreta = storageProperties.getS3().getChaveAcessoSecreta();
         var regiao = storageProperties.getS3().getRegiao();
 
-        var credentials = new BasicAWSCredentials(chaveAcesso, chaveAcessoSecreta);
-        return AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(regiao)
+        var credentials = AwsBasicCredentials.create(chaveAcesso, chaveAcessoSecreta);
+
+        return S3Client.builder()
+                .credentialsProvider(StaticCredentialsProvider.create(credentials))
+                .region(regiao)
                 .build();
     }
 

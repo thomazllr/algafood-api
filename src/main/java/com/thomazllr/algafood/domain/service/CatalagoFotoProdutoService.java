@@ -43,6 +43,7 @@ public class CatalagoFotoProdutoService {
                 .nomeArquivo(foto.getNomeArquivo())
                 .contentType(foto.getContentType())
                 .inputStream(dadosArquivo)
+                .size(foto.getTamanho())
                 .build();
 
         fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
