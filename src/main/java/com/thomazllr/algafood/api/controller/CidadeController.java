@@ -2,6 +2,7 @@ package com.thomazllr.algafood.api.controller;
 
 import com.thomazllr.algafood.api.assembler.cidade.CidadeInputDisassembler;
 import com.thomazllr.algafood.api.assembler.cidade.CidadeModelAssembler;
+import com.thomazllr.algafood.api.controller.openapi.CidadeControllerOpenApi;
 import com.thomazllr.algafood.api.model.CidadeModel;
 import com.thomazllr.algafood.api.model.input.cidade.CidadeInput;
 import com.thomazllr.algafood.domain.entity.Cidade;
@@ -11,7 +12,6 @@ import com.thomazllr.algafood.domain.repository.CidadeRepository;
 import com.thomazllr.algafood.domain.service.CidadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cidades")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 
     private final CidadeRepository repository;
     private final CidadeService service;
@@ -34,20 +34,22 @@ public class CidadeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CidadeModel> buscarPorId(@PathVariable Long id) {
+    public CidadeModel buscar(@PathVariable Long id) {
         var cidade = service.buscarOuFalhar(id);
-        return ResponseEntity.ok(assembler.toModel(cidade));
+        return assembler.toModel(cidade);
     }
 
     @PostMapping
-    public ResponseEntity<CidadeModel> salvar(@RequestBody @Valid CidadeInput input) {
-        Cidade cidade = disassembler.toEntity(input);
+    public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
+            Cidade cidade = disassembler.toEntity(cidadeInput);
+
             cidade = service.salvar(cidade);
+
+            return assembler.toModel(cidade);
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(cidade));
     }
 
     @PutMapping("/{id}")
